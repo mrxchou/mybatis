@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.roger.mapper.StudentMapper">
+    <!---->
+    <sql id="select">select * from student</sql>
+    <!--查询所有-->
+    <select id="findAllStu" resultType="student">
+        <include refid="select"/>
+    </select>
+    <!--根据id查询-->
+    <select id="findStuById" resultType="student" parameterType="java.lang.Integer">
+        <include refid="select"/>
+       where id = #{id}
+    </select>
+    <!--插入-->
+    <insert id="insertStu" parameterType="student">
+        insert into student values (#{id},#{name},#{age});
+    </insert>
+    <!--修改-->
+    <update id="updateStu" parameterType="student">
+        update student set id=#{id},name=#{name},age=#{age} where id=#{id};
+    </update>
+    <!--删除-->
+    <delete id="deleteStuById" parameterType="java.lang.Integer">
+        delete from student where id=#{id};
+    </delete>
+    <!--多条件查询-->
+    <select id="findCondition"  resultType="student" parameterType="student">
+        <include refid="select"/>
+      <where>
+          <if test="id!=null">
+              id=#{id}
+          </if>
+          <if test="name!=null">
+              AND name=#{name}
+          </if>
+          <if test="age!=null">
+              AND age=#{age}
+          </if>
+      </where>
+    </select>
+    <!--多个id查询-->
+    <select id="findByIds" resultType="student" parameterType="list">
+        <include refid="select"/>
+        <where>
+            <foreach collection="list" open="id IN (" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+        </where>
+        <where>
+            <foreach collection="list" open="id in (" close=")" item="id" separator=","
+        </where>
+    </select>
+</mapper>
